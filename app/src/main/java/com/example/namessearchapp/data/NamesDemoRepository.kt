@@ -21,11 +21,9 @@ class NamesDemoRepository(
     @ExperimentalCoroutinesApi
     val latestNamesList = channelFlow {
         currentNamesMutable.collectLatest { flow ->
-            println("collectLatest started")
             flow.collectLatest { list ->
                 send(list)
             }
-            println("collectLatest completed")
         }
     }
 
@@ -37,11 +35,9 @@ class NamesDemoRepository(
 
     fun refreshNames(substring: String) {
         coroutineScope.launch {
-            println("refreshNames started")
             currentNamesMutable.emit(
                 names.map { names -> names.filter { it.contains(substring) } }
             )
-            println("refreshNames completed")
         }
     }
 }
