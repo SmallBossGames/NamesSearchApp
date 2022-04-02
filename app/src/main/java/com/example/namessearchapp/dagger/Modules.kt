@@ -1,6 +1,7 @@
 package com.example.namessearchapp.dagger
 
 import com.example.namessearchapp.data.INamesRepository
+import com.example.namessearchapp.data.ITestNamesRepository
 import com.example.namessearchapp.data.NamesDemoRepository
 import com.example.namessearchapp.demo.demoNames
 import dagger.Binds
@@ -22,5 +23,8 @@ object NamesDemoRepositoryModule {
 abstract class NamesRepositoryModule{
 
     @Binds
-    abstract fun bindNamesRepository(itemsSource: NamesDemoRepository): INamesRepository
+    abstract fun bindTestNamesRepository(itemsSource: NamesDemoRepository): ITestNamesRepository
+
+    @Binds
+    abstract fun bindNamesRepository(itemsSource: ITestNamesRepository): INamesRepository
 }

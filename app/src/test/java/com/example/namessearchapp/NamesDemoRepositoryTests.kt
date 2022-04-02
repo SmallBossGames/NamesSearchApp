@@ -1,6 +1,7 @@
 package com.example.namessearchapp
 
 import com.example.namessearchapp.data.NamesDemoRepository
+import com.example.namessearchapp.data.Success
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
@@ -21,9 +22,7 @@ class NamesDemoRepositoryTests {
         // Act
         runBlocking {
             val job = coroutineScope.launch {
-                repository.latestNamesList.take(1).collect {
-                    result = it
-                }
+                repository.latestNamesList.take(1).collect { result = (it as Success).names }
             }
 
             delay(100)

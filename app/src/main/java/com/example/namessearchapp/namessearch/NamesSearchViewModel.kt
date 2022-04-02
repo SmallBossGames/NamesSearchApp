@@ -5,14 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.example.namessearchapp.data.INamesRepository
+import com.example.namessearchapp.data.ITestNamesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
 
 @HiltViewModel
 class NamesSearchViewModel @Inject constructor(
-    private val namesRepository: INamesRepository
+    private val namesRepository: ITestNamesRepository
 ): ViewModel() {
     var namePattern by mutableStateOf("")
 
@@ -26,5 +26,9 @@ class NamesSearchViewModel @Inject constructor(
             "" -> namesRepository.refreshNames()
             else -> namesRepository.refreshNames(*pattern.split(" ").toTypedArray())
         }
+    }
+
+    fun onEmulateError(){
+        namesRepository.emulateError()
     }
 }

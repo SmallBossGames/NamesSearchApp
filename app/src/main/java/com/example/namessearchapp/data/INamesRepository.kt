@@ -5,7 +5,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface INamesRepository {
     @ExperimentalCoroutinesApi
-    val latestNamesList: Flow<List<String>>
+    val latestNamesList: Flow<GettingNamesResult>
+
     fun refreshNames()
     fun refreshNames(vararg patterns: String)
 }
+

@@ -2,10 +2,11 @@ package com.example.namessearchapp.data
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import java.lang.IllegalStateException
 
 class NamesDemoRepository(
     private val demoNamesList: List<String>,
-) : INamesRepository {
+) : ITestNamesRepository {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
     private val names get() = flow {
@@ -18,13 +19,14 @@ class NamesDemoRepository(
     var demoRequestDelayInMillis: Long = 1000
 
     @ExperimentalCoroutinesApi
-    override val latestNamesList = channelFlow {
-        currentNamesMutable.collectLatest { flow ->
-            flow.collectLatest { list ->
-                send(list)
+    override val latestNamesList = currentNamesMutable
+        .mapLatest {
+            try {
+                Success(it.single())
+            } catch (e: IllegalArgumentException){
+                Error
             }
         }
-    }
 
     override fun refreshNames() {
         coroutineScope.launch {
@@ -43,4 +45,15 @@ class NamesDemoRepository(
             )
         }
     }
+
+    override fun emulateError() {
+        coroutineScope.launch {
+            val errorFlow = flow<List<String>> {
+                throw IllegalArgumentException()
+            }
+
+            currentNamesMutable.emit(errorFlow)
+        }
+    }
 }
+
